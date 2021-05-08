@@ -1,0 +1,11 @@
+# Editor configs
+.vscode/
+
+/fennel_rblx
+/proj
+
+# Lua build files
+*.src.rock
+*.asc
+*.zip
+*.tar.gz
