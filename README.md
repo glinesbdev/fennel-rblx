@@ -4,6 +4,14 @@ Using the power of [Moon Garden][5] and incorporating the fun of [Roblox][1], de
 
 ⚠️ This tool requires that [Rojo][4] is installed. ⚠️
 
+## Installation
+
+The easiest way to use Fennel Rblx is using LuaRocks:
+
+```shell
+luarocks install fennel_rblx
+```
+
 ## Usage
 
 ```shell
