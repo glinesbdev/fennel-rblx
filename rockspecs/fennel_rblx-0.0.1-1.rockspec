@@ -7,7 +7,7 @@ source = {
    tag = fennel_rblx_version
 }
 description = {
-   summary = "Fennel Rblx is a workflow tool for Roblox development using the Fennel programming language..",
+   summary = "Fennel Rblx is a workflow tool for Roblox development using the Fennel programming language.",
    detailed = [[
       Using the power of Moon Garden and incorporating the fun of Roblox, develop your Roblox games in the awesome Lisp style Fennel programming language.]],
    homepage = "https://github.com/glinesbdev/fennel-rblx",

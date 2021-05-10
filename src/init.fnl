@@ -1,65 +1,38 @@
-(local lfs (require :lfs))
 (local json (require :json))
 
 (local init {})
-(local project-config
-       (json.encode {:name :roblox-fennel-game
-                     :tree {:$className :DataModel
-                            :Chat {:$className :Chat
-                                   :$ignoreUnknownInstances true
-                                   :$path :out/chat}
-                            :ReplicatedStorage {:$className :ReplicatedStorage
-                                                :$ignoreUnknownInstances true
-                                                :$path :out/ReplicatedStorage}
-                            :ServerScriptService {:$className :ServerScriptService
-                                                  :$ignoreUnknownInstances true}
-                            :StarterGui {:$className :StarterGui
-                                         :$ignoreUnknownInstances true
-                                         :$path :out/StarterGui}
-                            :StarterPlayer {:$className :StarterPlayer
-                                            :$ignoreUnknownInstances true
-                                            :StarterPlayerScripts {:$className :StarterPlayerScripts
-                                                                   :$ignoreUnknownInstances true
-                                                                   :$path :out/StarterPlayer/StarterPlayerScripts}}
-                            :Workspace {:$className :Workspace
-                                        :$ignoreUnknownInstances true
-                                        :$path :out/Workspace
-                                        :$properties {:FilteringEnabled true}}}}))
+(local separator (package.config:sub 1 1))
 
-(fn write-config [path]
-  (let [f (assert (io.open (.. path :/default.project.json) :w))]
-    (f:write project-config)
-    (f:close)))
+(fn remove-lua-files [path]
+  (os.remove (.. path separator :client separator :init.client.lua))
+  (os.remove (.. path separator :server separator :init.server.lua))
+  (os.remove (.. path separator :shared separator :Hello.lua)))
 
-;; lfs.mkdir can't make nested paths?!
+(fn write-fennel-files [path]
+  (let [files {:client (.. path separator :client separator :init.client.fnl)
+               :server (.. path separator :server separator :init.server.fnl)
+               :Hello (.. path separator :shared separator :Hello.fnl)}]
+    (each [name file (pairs files)]
+      (let [f (io.open file :w)]
+        (if (= name :Hello)
+            (do
+              (f:write (string.format "(fn hello []\n\t(print :Hello!)\n)"))
+              (f:close))
+            (f:write (string.format "(print \"hello world from the %s!\")" name))
+            (f:close))))))
+
 (fn init.project [path]
-  (let [src-dirs [:/Chat :/StarterGui :/Workspace]]
-    (lfs.mkdir path)
-    (lfs.mkdir (.. path :/src))
-    (lfs.mkdir (.. path :/src :/StarterPlayer))
-    (lfs.mkdir (.. path :/src :/StarterPlayer :/StarterPlayerScripts))
-    (each [_ dir (ipairs src-dirs)]
-      (lfs.mkdir (.. path :/src dir)))
-    (let [f (assert (io.open (.. path :/src :/Chat :/Chat.client.fnl) :w))
-          f1 (assert (io.open (.. path :/src :/StarterGui
-                                  :/StarterGui.client.fnl)
-                              :w))
-          f2 (assert (io.open (.. path :/src :/Workspace :/Workspace.client.fnl)
-                              :w))
-          f3 (assert (io.open (.. path :/src :/StarterPlayer
-                                  :/StarterPlayerScripts
-                                  :/StarterPlayer.client.fnl)
-                              :w))
-          msg "(print 'hello world!')"]
-      (f:write msg)
-      (f:close)
-      (f1:write msg)
-      (f1:close)
-      (f2:write msg)
-      (f2:close)
-      (f3:write msg)
-      (f3:close)))
-  (write-config path))
+  (os.execute (string.format "%s %s %s" :rojo :init path))
+  (let [fread (io.open (.. path separator :default.project.json) :r)
+        text (fread:read :*all)
+        updated (string.gsub text :src :out)
+        fwrite (do
+                 (fread:close)
+                 (io.open (.. path separator :default.project.json) :w))]
+    (fwrite:write updated)
+    (fwrite:close))
+  (remove-lua-files (.. path separator :src))
+  (write-fennel-files (.. path separator :src)))
 
 init
 
