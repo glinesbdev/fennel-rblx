@@ -21,8 +21,7 @@ dependencies = {
 build = {
    type = "builtin",
    modules = {
-      fennel = "fennel.lua",
-      ["rxi-json-lua"] = "json.lua"
+      fennel = "fennel.lua"
    },
    install = {
       bin = {
