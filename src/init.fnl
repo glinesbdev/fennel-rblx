@@ -1,5 +1,3 @@
-(local json (require :json))
-
 (local init {})
 (local separator (package.config:sub 1 1))
 
