@@ -22,7 +22,7 @@ build = {
    type = "builtin",
    modules = {
       fennel = "fennel.lua",
-      json = "json.lua"
+      ["rxi-json-lua"] = "json.lua"
    },
    install = {
       bin = {
