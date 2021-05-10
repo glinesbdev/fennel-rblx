@@ -11,6 +11,10 @@ fennel_rblx: src/core.fnl
 	@$(FENNEL) --compile --no-metadata --require-as-include $< >> $@
 	@chmod 755 $@
 
+install: fennel_rblx
+	mkdir -p $(DESTDIR)$(BIN_DIR) && \
+		cp fennel_rblx $(DESTDIR)$(BIN_DIR)/
+
 uploadrock: rockspecs/fennel_rblx-$(VERSION)-1.rockspec
 	luarocks --local build $<
 	$(HOME)/.luarocks/bin/fennel_rblx --version | grep $(VERSION)
