@@ -15,11 +15,10 @@ description = {
 }
 dependencies = {
    "lua >= 5.1",
-   "luafilesystem ~> 1.5",
    "moongarden ~> 0.1.1"
 }
 build = {
-   type = "builtin",
+   type = "make",
    modules = {
       fennel = "fennel.lua"
    },
