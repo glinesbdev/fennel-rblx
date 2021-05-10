@@ -19,7 +19,7 @@ dependencies = {
    "moongarden ~> 0.1.1"
 }
 build = {
-   type = "make",
+   type = "builtin",
    modules = {
       fennel = "fennel.lua",
       json = "json.lua"
